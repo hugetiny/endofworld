@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>3dLines</title>
+    <title>End of world</title>
     <style>
         *{
             padding: 0;
@@ -14,6 +14,36 @@
             width: 100vw;
             height: 100vh;
         }
+        nav{
+            position:fixed;
+            right:0;
+            z-index: 10;
+            margin:8px;
+        }
+        nav div{
+            display: inline;
+            color: white;
+
+        }
+        nav div.earthbtn{
+            display: none;
+        }
+        nav div a{
+            width: 50px;
+            text-decoration: none;
+            color: white;
+            border: 1px solid #5d910b;
+            background: linear-gradient(#93bd20, #659e10);
+            border-radius: 2px;
+            box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 3px 7px rgba(0,0,0,0.7);
+            background-color: #93bd20;
+            padding: 10px 12px;
+            margin-top: 6px;
+            line-height: 14px;
+            font-size: 14px;
+            display: inline-block;
+            text-align: center;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
@@ -21,12 +51,35 @@
     <script src="js/world.js"></script>
 </head>
 <body>
+<nav>
+    <div><a href="https://github.com/hugetiny/endofworld">Github</a></div>
+    <div class="mutebtn"><a>Mute</a></div>
+    <div class="earthbtn"><a>Earth</a></div>
+</nav>
 <div class="EC"></div>
-<audio controls autoplay>
+<audio id="bgm" autoplay>
     <source src="the%20end%20of%20the%20world.mp3" type="audio/mpeg">
     Your browser is too old
 </audio>
+
 <script>
+    //bgm
+    var music = document.getElementById("bgm");
+    function toggleSound() {
+        console.log(music);
+        console.log(music.paused);
+        if (music.paused) {
+            music.paused=false;
+            music.play();
+        }
+    }
+    setTimeout("toggleSound()",5000);
+    $('.mutebtn').on('click',() => {
+
+        music.pause();
+    })
+
+
     window.onload = () => {
         let EC = echarts.init(document.querySelector('.EC'))
         let canvas = document.createElement('canvas');
@@ -63,36 +116,38 @@
             tooltip: {
                 show: true
             },
-            // visualMap: [
-            //     {
-            //     show: false,
-            //     type: 'continuous',
-            //     seriesIndex: 0,
-            //     text: ['scatter3D'],
-            //     textStyle: {
-            //         color: '#fff'
-            //     },
-            //     calculable: true,
-            //     max: 3000,
-            //     inRange: {
-            //         color: ['#87aa66', '#eba438', '#d94d4c']
-            //     }
-            // }, {
-            //     show: false,
-            //     type: 'continuous',
-            //     seriesIndex: 1,
-            //     calculable: true,
-            //     max: 3000,
-            //     inRange: {
-            //         color: ['#87aa66', '#eba438', '#d94d4c']
-            //     }
-            // }],
+            visualMap: [
+                {
+                show: false,
+                type: 'continuous',
+                seriesIndex: 0,
+                text: ['scatter3D'],
+                textStyle: {
+                    color: '#fff'
+                },
+                calculable: true,
+                max: 3000,
+                inRange: {
+                    color: ['#87aa66', '#eba438', '#d94d4c']
+                }
+            },
+                {
+                show: false,
+                type: 'continuous',
+                seriesIndex: 1,
+                calculable: true,
+                max: 3000,
+                inRange: {
+                    color: ['#87aa66', '#eba438', '#d94d4c']
+                }
+            }],
+            backgroundColor: '#000',
             globe: {
                 baseTexture: mapChart,
                 // baseTexture: "./static/world.topo.bathy.200401.jpg",
                 // heightTexture: "./static/world.topo.bathy.200401.jpg",
                 // displacementScale: 0.1,
-
+                environment: 'static/starfield-min.jpg',
                 // shading: 'lambert',
                 light: {
                     main: {
@@ -112,33 +167,34 @@
                     distance: 240
                 }
             },
-            // series: [{
-            //     name: 'lines3D',
-            //     type: 'lines3D',
-            //     zlevel: 2,
-            //     coordinateSystem: 'globe',
-            //     effect: {
-            //         show: true
-            //     },
-            //     blendMode: 'lighter',
-            //     lineStyle: {
-            //         width: 2
-            //     },
-            //     data: [],
-            //     silent: false
-            // },
-            // {
-            //     name: '地域详情',
-            //     type: 'map',
-            //     map: '',
-            //     zlevel: 1,
-            //     zoom: 1,
-            //     top: 0,
-            //     left: 0,
-            //     right: 0,
-            //     bottom: 0,
-            //     data: []
-            // }]
+            series: [
+                {
+                name: 'lines3D',
+                type: 'lines3D',
+                zlevel: 2,
+                coordinateSystem: 'globe',
+                effect: {
+                    show: true
+                },
+                blendMode: 'lighter',
+                lineStyle: {
+                    width: 2
+                },
+                data: [],
+                silent: false
+            },
+            {
+                name: 'detail',
+                type: 'map',
+                map: '',
+                zlevel: 1,
+                zoom: 1,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                data: []
+            }]
         }
         // random example
         // const rodamData = () => {
@@ -159,6 +215,7 @@
         //     option.series[0].data = option.series[0].data.concat(rodamData())
         // }
         EC.setOption(option)
+        //TODO click events
         mapChart.on('click', params => {
             let name = params.name
             let mapJson = 'https://raw.githubusercontent.com/Mying666/EC-JSON/gh-pages/json/' + name + '.json'
@@ -178,11 +235,12 @@
                 })
                 option.series[1].data = data
                 EC.setOption(option)
+                $('.earthbtn').show()
                 EC.hideLoading()
             })
         })
-        EC.on('dblclick', () => {
-            // option.title.text = 'click to get map'
+        $('.earthbtn').on('click', () => {
+            // option.title.text = 'get back to earth'
             option.series[1].map = ''
             option.series[1].zlevel = 1
             EC.setOption(option)
