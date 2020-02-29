@@ -1,24 +1,193 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Don't they know this's the end of the world</title>
+    <title>3dLines</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .EC{
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-gl@1.1.1/dist/echarts-gl.min.js"></script>
+    <script src="js/world.js"></script>
 </head>
 <body>
-<p>Don't they know this's the end of the world
-
-    Cause you don't love me any more
-
-    Why do the birds go on singing
-
-    Why do the stars glow above
-
-    Don't they know this's the end of the w</p>
+<div class="EC"></div>
+<audio controls autoplay>
+    <source src="the%20end%20of%20the%20world.mp3" type="audio/mpeg">
+    Your browser is too old
+</audio>
 <script>
-    alert('alert works')
+    window.onload = () => {
+        let EC = echarts.init(document.querySelector('.EC'))
+        let canvas = document.createElement('canvas');
+        // earth skin
+        let mapChart = echarts.init(canvas, null, {
+            // width: 4096,
+            // height: 2160
+            width:2560,
+            height:1440
+        });
+        mapChart.setOption({
+            series: [{
+                type: 'map',
+                map: 'world',
+                // full screen canvas
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                boundingCoords: [
+                    [-180, 90],
+                    [180, -90]
+                ]
+            }]
+        });
+        let option = {
+            // title: {
+            //     text: 'Click to enter details',
+            //     textStyle: {
+            //         color: '#fff'
+            //     }
+            // },
+            // backgroundColor: '#333',
+            tooltip: {
+                show: true
+            },
+            // visualMap: [
+            //     {
+            //     show: false,
+            //     type: 'continuous',
+            //     seriesIndex: 0,
+            //     text: ['scatter3D'],
+            //     textStyle: {
+            //         color: '#fff'
+            //     },
+            //     calculable: true,
+            //     max: 3000,
+            //     inRange: {
+            //         color: ['#87aa66', '#eba438', '#d94d4c']
+            //     }
+            // }, {
+            //     show: false,
+            //     type: 'continuous',
+            //     seriesIndex: 1,
+            //     calculable: true,
+            //     max: 3000,
+            //     inRange: {
+            //         color: ['#87aa66', '#eba438', '#d94d4c']
+            //     }
+            // }],
+            globe: {
+                baseTexture: mapChart,
+                // baseTexture: "./static/world.topo.bathy.200401.jpg",
+                // heightTexture: "./static/world.topo.bathy.200401.jpg",
+                // displacementScale: 0.1,
+
+                // shading: 'lambert',
+                light: {
+                    main: {
+                        intensity: 0.1,
+                        shadow: true
+                    },
+                    ambient: {
+                        intensity: 0.1
+                    }
+                },
+                viewControl: {
+                    alpha: 30,
+                    beta: 160,
+                    // targetCoord: [116.46, 39.92],
+                    autoRotate: true,
+                    autoRotateAfterStill: 10,
+                    distance: 240
+                }
+            },
+            // series: [{
+            //     name: 'lines3D',
+            //     type: 'lines3D',
+            //     zlevel: 2,
+            //     coordinateSystem: 'globe',
+            //     effect: {
+            //         show: true
+            //     },
+            //     blendMode: 'lighter',
+            //     lineStyle: {
+            //         width: 2
+            //     },
+            //     data: [],
+            //     silent: false
+            // },
+            // {
+            //     name: '地域详情',
+            //     type: 'map',
+            //     map: '',
+            //     zlevel: 1,
+            //     zoom: 1,
+            //     top: 0,
+            //     left: 0,
+            //     right: 0,
+            //     bottom: 0,
+            //     data: []
+            // }]
+        }
+        // random example
+        // const rodamData = () => {
+        //     let name = 'randomdots' + Math.random().toFixed(5) * 100000
+        //     let longitude = 105.18
+        //     let longitude2 = Math.random() * 360 - 180
+        //     let latitude = 37.51
+        //     let latitude2 = Math.random() * 180 - 90
+        //     return {
+        //         coords: [
+        //             [longitude2, latitude2],
+        //             [longitude, latitude]
+        //         ],
+        //         value: (Math.random() * 3000).toFixed(2)
+        //     }
+        // }
+        // for (let i = 0; i < 500; i++) {
+        //     option.series[0].data = option.series[0].data.concat(rodamData())
+        // }
+        EC.setOption(option)
+        mapChart.on('click', params => {
+            let name = params.name
+            let mapJson = 'https://raw.githubusercontent.com/Mying666/EC-JSON/gh-pages/json/' + name + '.json'
+            EC.showLoading()
+            $.getJSON(mapJson, geoJson => {
+                // option.title.text = 'return?'
+                option.series[1].map = name
+                option.series[1].zlevel = 3
+                echarts.registerMap(name, geoJson)
+                // random example
+                let data = []
+                geoJson.features.forEach(d => {
+                    data.push({
+                        name: d.properties.name,
+                        value: (Math.random() * 3000).toFixed(2)
+                    })
+                })
+                option.series[1].data = data
+                EC.setOption(option)
+                EC.hideLoading()
+            })
+        })
+        EC.on('dblclick', () => {
+            // option.title.text = 'click to get map'
+            option.series[1].map = ''
+            option.series[1].zlevel = 1
+            EC.setOption(option)
+        })
+    }
 </script>
 </body>
 </html>
