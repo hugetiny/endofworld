@@ -52,7 +52,7 @@
 </head>
 <body>
 <nav>
-    <div><a href="v1.html">canvas ver</a></div>
+    <div><a href="index.html">jpg ver</a></div>
     <div><a href="https://github.com/hugetiny/endofworld">Github</a></div>
     <div class="mutebtn"><a>Mute</a></div>
     <div class="earthbtn"><a>Earth</a></div>
@@ -144,19 +144,19 @@
             }],
             backgroundColor: '#000',
             globe: {
-                // baseTexture: mapChart,
-                baseTexture: "./static/world.topo.bathy.200401.jpg",
-                heightTexture: "./static/world.topo.bathy.200401.jpg",
-                displacementScale: 0.02,
+                baseTexture: mapChart,
+                // baseTexture: "./static/world.topo.bathy.200401.jpg",
+                // heightTexture: "./static/world.topo.bathy.200401.jpg",
+                // displacementScale: 0.1,
                 environment: 'static/starfield-min.jpg',
                 // shading: 'lambert',
                 light: {
-                    // main: {
-                    //     intensity: 0.5,
-                    //     shadow: true
-                    // },
+                    main: {
+                        intensity: 0.1,
+                        shadow: true
+                    },
                     ambient: {
-                        intensity: 1
+                        intensity: 0.1
                     }
                 },
                 viewControl: {
