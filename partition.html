@@ -6,36 +6,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>End of world</title>
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
         }
-        .EC{
+
+        .EC {
             width: 100vw;
             height: 100vh;
         }
-        nav{
-            position:fixed;
-            right:0;
+
+        nav {
+            position: fixed;
+            right: 0;
             z-index: 10;
-            margin:8px;
+            margin: 8px;
         }
-        nav div{
+
+        nav div {
             display: inline;
             color: white;
 
         }
-        nav div.earthbtn{
+
+        nav div.earthbtn {
             display: none;
         }
-        nav div a{
+
+        nav div a {
             width: 50px;
             text-decoration: none;
             color: white;
             border: 1px solid #5d910b;
             background: linear-gradient(#93bd20, #659e10);
             border-radius: 2px;
-            box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3), 0px 3px 7px rgba(0,0,0,0.7);
+            box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 3px 7px rgba(0, 0, 0, 0.7);
             background-color: #93bd20;
             padding: 10px 12px;
             margin-top: 6px;
@@ -54,30 +59,11 @@
 <nav>
     <div><a href="index.html">jpg ver</a></div>
     <div><a href="https://github.com/hugetiny/endofworld">Github</a></div>
-    <div class="mutebtn"><a>Mute</a></div>
+<!--    <div class="mutebtn"><a>Mute</a></div>-->
     <div class="earthbtn"><a>Earth</a></div>
 </nav>
 <div class="EC"></div>
-
-
 <script>
-    //bgm
-    var music = document.getElementById("bgm");
-    function toggleSound() {
-        console.log(music);
-        console.log(music.paused);
-        if (music.paused) {
-            music.paused=false;
-            music.play();
-        }
-    }
-    setTimeout("toggleSound()",5000);
-    $('.mutebtn').on('click',() => {
-
-        music.pause();
-    })
-
-
     window.onload = () => {
         let EC = echarts.init(document.querySelector('.EC'))
         let canvas = document.createElement('canvas');
@@ -85,8 +71,8 @@
         let mapChart = echarts.init(canvas, null, {
             // width: 4096,
             // height: 2160
-            width:2560,
-            height:1440
+            width: 2560,
+            height: 1440
         });
         mapChart.setOption({
             series: [{
@@ -116,29 +102,29 @@
             },
             visualMap: [
                 {
-                show: false,
-                type: 'continuous',
-                seriesIndex: 0,
-                text: ['scatter3D'],
-                textStyle: {
-                    color: '#fff'
+                    show: false,
+                    type: 'continuous',
+                    seriesIndex: 0,
+                    text: ['scatter3D'],
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    calculable: true,
+                    max: 3000,
+                    inRange: {
+                        color: ['#87aa66', '#eba438', '#d94d4c']
+                    }
                 },
-                calculable: true,
-                max: 3000,
-                inRange: {
-                    color: ['#87aa66', '#eba438', '#d94d4c']
-                }
-            },
                 {
-                show: false,
-                type: 'continuous',
-                seriesIndex: 1,
-                calculable: true,
-                max: 3000,
-                inRange: {
-                    color: ['#87aa66', '#eba438', '#d94d4c']
-                }
-            }],
+                    show: false,
+                    type: 'continuous',
+                    seriesIndex: 1,
+                    calculable: true,
+                    max: 3000,
+                    inRange: {
+                        color: ['#87aa66', '#eba438', '#d94d4c']
+                    }
+                }],
             backgroundColor: '#000',
             globe: {
                 baseTexture: mapChart,
@@ -167,51 +153,33 @@
             },
             series: [
                 {
-                name: 'lines3D',
-                type: 'lines3D',
-                zlevel: 2,
-                coordinateSystem: 'globe',
-                effect: {
-                    show: true
+                    name: 'lines3D',
+                    type: 'lines3D',
+                    zlevel: 2,
+                    coordinateSystem: 'globe',
+                    effect: {
+                        show: true
+                    },
+                    blendMode: 'lighter',
+                    lineStyle: {
+                        width: 2
+                    },
+                    data: [],
+                    silent: false
                 },
-                blendMode: 'lighter',
-                lineStyle: {
-                    width: 2
-                },
-                data: [],
-                silent: false
-            },
-            {
-                name: 'detail',
-                type: 'map',
-                map: '',
-                zlevel: 1,
-                zoom: 1,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                data: []
-            }]
+                {
+                    name: 'detail',
+                    type: 'map',
+                    map: '',
+                    zlevel: 1,
+                    zoom: 1,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    data: []
+                }]
         }
-        // random example
-        // const rodamData = () => {
-        //     let name = 'randomdots' + Math.random().toFixed(5) * 100000
-        //     let longitude = 105.18
-        //     let longitude2 = Math.random() * 360 - 180
-        //     let latitude = 37.51
-        //     let latitude2 = Math.random() * 180 - 90
-        //     return {
-        //         coords: [
-        //             [longitude2, latitude2],
-        //             [longitude, latitude]
-        //         ],
-        //         value: (Math.random() * 3000).toFixed(2)
-        //     }
-        // }
-        // for (let i = 0; i < 500; i++) {
-        //     option.series[0].data = option.series[0].data.concat(rodamData())
-        // }
         EC.setOption(option)
         //TODO click events
         mapChart.on('click', params => {
@@ -244,6 +212,23 @@
             EC.setOption(option)
         })
     }
+    //bgm
+    // var music = document.getElementById("bgm");
+    //
+    // function toggleSound() {
+    //     console.log(music);
+    //     console.log(music.paused);
+    //     if (music.paused) {
+    //         music.paused = false;
+    //         music.play();
+    //     }
+    // }
+    //
+    // setTimeout("toggleSound()", 5000);
+    // $('.mutebtn').on('click', () => {
+    //
+    //     music.pause();
+    // })
 </script>
 </body>
 </html>
