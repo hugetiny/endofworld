@@ -57,129 +57,106 @@
 </head>
 <body>
 <nav>
-<!--    <div><a href="partition.html">next ver</a></div>-->
+    <!--    <div><a href="partition.html">next ver</a></div>-->
+    <div>COVID-19</div>
     <div><a href="https://github.com/hugetiny/endofworld">Github</a></div>
-<!--    <div class="mutebtn"><a>Mute</a></div>-->
+    <!--    <div class="mutebtn"><a>Mute</a></div>-->
     <div class="earthbtn"><a>Earth</a></div>
 </nav>
 <div class="EC"></div>
 <script>
-    axios({
-        method: 'get',
-        url: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
-        // data: {
-        //     firstName: 'Fred',
-        //     lastName: 'Flintstone'
-        // }
-    })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
     window.onload = () => {
-        let EC = echarts.init(document.querySelector('.EC'))
-        let canvas = document.createElement('canvas');
-        // earth skin
-        let mapChart = echarts.init(canvas, null, {
-            // width: 4096,
-            // height: 2160
-            width: 2560,
-            height: 1440
-        });
-        // $.getJSON('https://www.echartsjs.com/examples/data-gl/asset/data/population.json', function (data) {
-        // function degToRad(degrees) {
-        //     return degrees * (Math.PI / 180);
-        // }
-        //
-        // function radToDeg(radians) {
-        //     return radians * (180 / Math.PI)
-        // }
-        //
-        // function latlngToXYZ ( coord, radius ){
-        //     var sphereArray = [];
-        //     var radius = radius||10;
-        //     for(var i = 0; i < coord.length; i++) {
-        //         var lat = degToRad(coord[i][0]);
-        //         var lon = degToRad(coord[i][1]);
-        //         var posY = radius * Math.sin(lat);
-        //         var temp = radius * Math.cos(lat);
-        //         var posX = temp * Math.sin(lon);
-        //         var posZ = temp * Math.cos(lon);
-        //
-        //         sphereArray.push({x:posX,y:posY,z:posZ})
-        //     }
-        //     return sphereArray;
-        // }
-        // shanghai 31.201999999999998,121.4491
+        let data=[]
+        axios({
+            method: 'get',
+            url: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
+            // data: {
+            //     firstName: 'Fred',
+            //     lastName: 'Flintstone'
+            // }
+        })
+            .then(function (response) {
 
+                response.data.split('\n').forEach(raw => {
+                    raw = raw.split(',')
+                    data.push([parseFloat(raw[3]),parseFloat(raw[2]),parseFloat(raw[raw.length-1])])
 
-//上海
-        let data = [[114,30,100]]
-        // data = data.filter(function (dataItem) {
-        //     return dataItem[2] > 0;
-        // }).map(function (dataItem) {
-        //     return [dataItem[0], dataItem[1], Math.sqrt(dataItem[2])];
-        // });
+                })
+                data.shift()
+                console.log(data)
+                let EC = echarts.init(document.querySelector('.EC'))
+                let canvas = document.createElement('canvas');
 
-        mapChart.setOption({
-            series: [{
-                type: 'map',
-                map: 'world',
-                // full screen canvas
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                boundingCoords: [
-                    [-180, 90],
-                    [180, -90]
-                ]
-            }]
-        });
-        let option = {
-            // TODO category
-            visualMap: {
-                show: false,
-                min: 0,
-                max: 60,
-                inRange: {
-                    symbolSize: [1.0, 10.0]
+                // let mapChart = echarts.init(canvas, null, {
+                //     // width: 4096,
+                //     // height: 2160
+                //     width: 2560,
+                //     height: 1440
+                // });
+
+                // mapChart.setOption({
+                //     series: [{
+                //         type: 'map',
+                //         map: 'world',
+                //         // full screen canvas
+                //         top: 0,
+                //         left: 0,
+                //         right: 0,
+                //         bottom: 0,
+                //         boundingCoords: [
+                //             [-180, 90],
+                //             [180, -90]
+                //         ]
+                //     }]
+                // });
+                let option = {
+                    // TODO category
+                    visualMap: {
+                        show: false,
+                        min: 0,
+                        max: 1000,
+                        inRange: {
+                            symbolSize: [1.0, 20.0]
+                        }
+                    },
+                    globe: {
+                        baseTexture: "./static/world.jpg",
+                        heightTexture: "./static/world.jpg",
+                        environment: 'static/starfield.jpg',
+                        displacementScale: 0.03,
+                        displacementQuality: 'high',
+                        globeRadius:145,
+                        // globeOuterRadius: 115,
+                        // baseColor: '#ccc',
+                        shading: 'color',
+                        viewControl: {
+                            alpha: 30,
+                            beta: 160,
+                            // targetCoord: [116.46, 39.92],
+                            autoRotate: true,
+                            autoRotateAfterStill: 5,
+                            distance: 300
+                        }
+                    },
+                    series: {
+                        type: 'scatter3D',
+                        coordinateSystem: 'globe',
+                        // blendMode: 'lighter',
+                        symbolSize: 2,
+                        // itemStyle: {
+                        //     color: 'rgb(50, 50, 150)',
+                        //     opacity: 1
+                        // },
+                        data: data
+                    }
                 }
-            },
-            globe: {
-                baseTexture: "./static/world.jpg",
-                heightTexture: "./static/world.jpg",
-                environment: 'static/starfield.jpg',
-                displacementScale: 0.03,
-                displacementQuality: 'high',
-                // globeRadius:100,
-                globeOuterRadius: 100,
-                // baseColor: '#ccc',
-                shading: 'color',
-                viewControl: {
-                    alpha: 30,
-                    beta: 160,
-                    // targetCoord: [116.46, 39.92],
-                    autoRotate: true,
-                    autoRotateAfterStill: 5,
-                    distance: 300
-                }
-            },
-            series: {
-                type: 'scatter3D',
-                coordinateSystem: 'globe',
-                // blendMode: 'lighter',
-                symbolSize: 2,
-                // itemStyle: {
-                //     color: 'rgb(50, 50, 150)',
-                //     opacity: 1
-                // },
-                data: data
-            }
-        }
-        EC.setOption(option)
+                EC.setOption(option)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
         //TODO click events
         // mapChart.on('click', params => {
         //     let name = params.name
@@ -219,20 +196,19 @@
 </audio>
 <script>
     // bgm
-    var music = document.getElementById("bgm");
-    function toggleSound() {
-        console.log(music);
-        console.log(music.paused);
-        if (music.paused) {
-            music.paused=false;
-            music.play();
-        }
-    }
-    setTimeout("toggleSound()",5000);
-    $('.mutebtn').on('click',() => {
-
-        music.pause();
-    })
+    // var music = document.getElementById("bgm");
+    // function toggleSound() {
+    //     console.log(music);
+    //     console.log(music.paused);
+    //     if (music.paused) {
+    //         music.paused=false;
+    //         music.play();
+    //     }
+    // }
+    // setTimeout("toggleSound()",5000);
+    // $('.mutebtn').on('click',() => {
+    //     music.pause();
+    // })
 </script>
 </body>
 </html>
