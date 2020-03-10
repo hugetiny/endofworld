@@ -67,12 +67,12 @@
 </head>
 <body>
 <header>
-    COVID-19 confirmed
+    COVID-19 recovered
 </header>
 <nav>
-<!--    <div><a href="index.html">COVID-19 confirmed</a></div>-->
+        <div><a href="index.html">COVID-19 confirmed</a></div>
     <div><a href="deaths.html">COVID-19 deaths</a></div>
-    <div><a href="recovered.html">COVID-19 recovered</a></div>
+<!--    <div><a href="recovered.html">COVID-19 recovered</a></div>-->
     <div ><a href="https://github.com/hugetiny/endofworld">Github</a></div>
     <!--    <div class="mutebtn"><a>Mute</a></div>-->
     <div class="earthbtn"><a>Earth</a></div>
@@ -138,7 +138,7 @@
                         displacementScale: 0.03,
                         displacementQuality: 'high',
                         // globeRadius: 200,
-                        globeOuterRadius: 105,
+                        globeOuterRadius: 110,
                         // baseColor: '#ccc',
                         shading: 'color',
                         viewControl: {
@@ -155,10 +155,10 @@
                         coordinateSystem: 'globe',
                         // blendMode: 'lighter',
                         symbolSize: 2,
-                        // itemStyle: {
-                        //     color: '#ff3b00',
-                        //     opacity: 1
-                        // },
+                        itemStyle: {
+                            color: 'green',
+                            opacity: 1
+                        },
                         data: data
                     }
                 }
