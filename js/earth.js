@@ -20,36 +20,36 @@ function getEarth(dataType) {
             let EC = echarts.init(document.querySelector('.EC'))
             let canvas = document.createElement('canvas');
 
-            let mapChart = echarts.init(canvas, null, {
-                width: 4096,
-                height: 2160
-            });
+            // let mapChart = echarts.init(canvas, null, {
+            //     width: 1096,
+            //     height: 160
+            // });
 
-            mapChart.setOption({
-                series: [{
-                    type: 'map',
-                    map: 'world',
-                    // full screen canvas
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    boundingCoords: [
-                        [-180, 90],
-                        [180, -90]
-                    ]
-                }]
-            });
+            // mapChart.setOption({
+            //     series: [{
+            //         type: 'map',
+            //         map: 'world',
+            //         // full screen canvas
+            //         top: 0,
+            //         left: 0,
+            //         right: 0,
+            //         bottom: 0,
+            //         boundingCoords: [
+            //             [-180, 90],
+            //             [180, -90]
+            //         ]
+            //     }]
+            // });
             let colorType
             switch (dataType) {
                 case 'Deaths':
-                    colorType='#999'
+                    colorType = '#999'
                     break;
                 case 'Recovered':
-                    colorType='green'
+                    colorType = 'green'
                     break;
                 default:
-                    colorType='red'
+                    colorType = 'red'
             }
             let option = {
                 // TODO category
