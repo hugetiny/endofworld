@@ -3,7 +3,8 @@ function getEarth(dataType) {
     let data = []
     axios({
         method: 'get',
-        url: `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-${dataType}.csv`
+        url: `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${dataType}_global.csv`
+        // url: `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-${dataType}.csv`
     })
         .then(function (response) {
             console.log(response.data.split('\n'))
@@ -89,10 +90,16 @@ function getEarth(dataType) {
                         color: colorType,
                         opacity: 1
                     },
-                    data: data
+                    data: data,
+                    tooltip:{
+                        show:false
+                    }
                 }
             }
             EC.setOption(option)
+            EC.on('mousemove', params => {
+                console.log(params)
+            })
         })
         .catch(function (error) {
             console.log(error);
